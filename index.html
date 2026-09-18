@@ -59,7 +59,6 @@
 </head>
 <body class="h-full flex flex-col font-sans antialiased bg-slate-950 text-slate-100 selection:bg-vinted selection:text-white">
 
-    <!-- Header Navigation -->
     <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -110,7 +109,7 @@
                         <i class="fa-solid fa-cloud-arrow-up"></i>
                     </div>
                     <p class="text-slate-200 font-semibold text-base mb-1">Przeciągnij zdjęcie ciucha lub kliknij, aby wybrać</p>
-                    <p class="text-slate-400 text-xs max-w-xs mb-4">Wybierz fotkę z galerii telefonu lub komputera (JPG, PNG)</p>
+                    <p class="text-slate-400 text-xs max-w-xs mb-4">Wybierz fotkę z galerii telefonu lub zrób zdjęcie aparatem (JPG, PNG)</p>
                     <div class="flex gap-2">
                         <span class="inline-flex items-center gap-1 text-[11px] bg-slate-800 text-slate-300 px-2.5 py-1 rounded-md"><i class="fa-solid fa-wand-magic"></i> Usuwanie Zagnieceń</span>
                         <span class="inline-flex items-center gap-1 text-[11px] bg-slate-800 text-slate-300 px-2.5 py-1 rounded-md"><i class="fa-solid fa-palette"></i> Zmiana Tła</span>
@@ -160,7 +159,6 @@
 
                 </div>
 
-                <!-- Editor Toolbar & Download -->
                 <div id="editorToolbar" class="hidden flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800">
                     <button id="reuploadBtn" class="px-3 py-2 text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition flex items-center gap-2">
                         <i class="fa-solid fa-arrow-rotate-left"></i> Zmień zdjęcie
@@ -183,7 +181,6 @@
         <!-- RIGHT COLUMN: Options & AI Listing Generator (5 cols) -->
         <div class="lg:col-span-5 flex flex-col gap-6">
 
-            <!-- Tool Tabs & Controls -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col gap-5">
                 
                 <!-- Tab Selector -->
@@ -205,32 +202,26 @@
 
                     <!-- Presets Grid -->
                     <div class="grid grid-cols-3 gap-2.5">
-                        <!-- Preset 1: Clean White -->
                         <button data-bg-preset="studio_white" class="preset-bg-btn active border-2 border-vinted bg-slate-800 hover:border-vinted p-2.5 rounded-xl text-left flex flex-col gap-1 transition relative overflow-hidden group">
                             <div class="w-full h-8 rounded bg-white border border-slate-300"></div>
                             <span class="text-[11px] font-semibold text-slate-200">Czysta Biel</span>
                         </button>
-                        <!-- Preset 2: Light Wood -->
                         <button data-bg-preset="nordic_wood" class="preset-bg-btn border-2 border-slate-800 bg-slate-800 hover:border-vinted p-2.5 rounded-xl text-left flex flex-col gap-1 transition relative overflow-hidden group">
                             <div class="w-full h-8 rounded bg-amber-100 border border-amber-200"></div>
                             <span class="text-[11px] font-semibold text-slate-200">Jasne Drewno</span>
                         </button>
-                        <!-- Preset 3: Marble -->
                         <button data-bg-preset="marble_lux" class="preset-bg-btn border-2 border-slate-800 bg-slate-800 hover:border-vinted p-2.5 rounded-xl text-left flex flex-col gap-1 transition relative overflow-hidden group">
                             <div class="w-full h-8 rounded bg-slate-200 border border-slate-300"></div>
                             <span class="text-[11px] font-semibold text-slate-200">Marmur Lux</span>
                         </button>
-                        <!-- Preset 4: Soft Pastel -->
                         <button data-bg-preset="pastel_sage" class="preset-bg-btn border-2 border-slate-800 bg-slate-800 hover:border-vinted p-2.5 rounded-xl text-left flex flex-col gap-1 transition relative overflow-hidden group">
                             <div class="w-full h-8 rounded bg-teal-100 border border-teal-200"></div>
                             <span class="text-[11px] font-semibold text-slate-200">Pastel Szałwia</span>
                         </button>
-                        <!-- Preset 5: Boho Hanger -->
                         <button data-bg-preset="studio_hanger" class="preset-bg-btn border-2 border-slate-800 bg-slate-800 hover:border-vinted p-2.5 rounded-xl text-left flex flex-col gap-1 transition relative overflow-hidden group">
                             <div class="w-full h-8 rounded bg-stone-300 border border-stone-400"></div>
                             <span class="text-[11px] font-semibold text-slate-200">Wieszak Studio</span>
                         </button>
-                        <!-- Preset 6: Transparent -->
                         <button data-bg-preset="transparent" class="preset-bg-btn border-2 border-slate-800 bg-slate-800 hover:border-vinted p-2.5 rounded-xl text-left flex flex-col gap-1 transition relative overflow-hidden group">
                             <div class="w-full h-8 rounded bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:8px_8px] bg-slate-900 border border-slate-700"></div>
                             <span class="text-[11px] font-semibold text-slate-200">Przezroczyste</span>
@@ -281,7 +272,6 @@
 
             </div>
 
-            <!-- AI VINTED LISTING GENERATOR BOX -->
             <div id="listingSection" class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col gap-4">
                 
                 <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -299,7 +289,6 @@
                 <!-- Structured Generated Output Form -->
                 <div class="space-y-3">
                     
-                    <!-- Title -->
                     <div>
                         <div class="flex justify-between items-center mb-1">
                             <label class="text-[11px] font-semibold text-slate-400">Tytuł aukcji:</label>
@@ -310,7 +299,6 @@
                         <input id="vintedTitle" type="text" placeholder="np. Oversizowa koszulka vintage czarna M" class="w-full text-xs font-medium bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-vinted">
                     </div>
 
-                    <!-- Meta Tags (Brand, Size, Condition, Price) -->
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                         <div>
                             <label class="text-[10px] font-medium text-slate-400 block mb-0.5">Marka:</label>
@@ -330,7 +318,6 @@
                         </div>
                     </div>
 
-                    <!-- Description -->
                     <div>
                         <div class="flex justify-between items-center mb-1">
                             <label class="text-[11px] font-semibold text-slate-400">Chwytliwy Opis Vinted:</label>
@@ -341,7 +328,6 @@
                         <textarea id="vintedDescription" rows="4" placeholder="Opis wygenerowany przez Gemini AI ze szczegółami, wymiarami i hashtagami..." class="w-full text-xs bg-slate-950 border border-slate-800 rounded-lg p-3 text-slate-200 focus:outline-none focus:border-vinted resize-none"></textarea>
                     </div>
 
-                    <!-- Tags -->
                     <div>
                         <div class="flex justify-between items-center mb-1">
                             <label class="text-[11px] font-semibold text-slate-400">Hashtagi Vinted:</label>
@@ -352,7 +338,6 @@
                         <input id="vintedTags" type="text" placeholder="#vintage #y2k #streetwear #casual #koszulka" class="w-full text-xs bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-300">
                     </div>
 
-                    <!-- Copy All Button -->
                     <button id="copyAllBtn" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs rounded-xl border border-slate-700 transition flex items-center justify-center gap-2">
                         <i class="fa-regular fa-copy"></i> Skopiuj Całe Ogłoszenie do Schowka
                     </button>
@@ -365,7 +350,6 @@
 
     </main>
 
-    <!-- API Key Settings Modal -->
     <div id="apiKeyModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
             <div class="flex justify-between items-center mb-4">
@@ -408,9 +392,9 @@
             apiKey: localStorage.getItem('vinted_gemini_api_key') || '',
             originalImageSrc: null,
             processedImageSrc: null,
-            activeTab: 'bg', // 'bg' or 'iron'
+            activeTab: 'bg',
             selectedBgPreset: 'studio_white',
-            sliderPos: 50, // %
+            sliderPos: 50,
             isProcessing: false,
             imageWidth: 0,
             imageHeight: 0
@@ -480,7 +464,6 @@
             setupModalEvents();
         }
 
-        // Show Toast Helper
         function showToast(message, iconClass = "fa-circle-check text-vinted-accent") {
             elements.toastMessage.textContent = message;
             elements.toast.querySelector('i').className = `fa-solid ${iconClass} text-base`;
@@ -544,11 +527,9 @@
                     state.imageWidth = img.width;
                     state.imageHeight = img.height;
 
-                    // Set DOM Images
                     elements.imgOriginal.src = e.target.result;
                     elements.imgProcessed.src = e.target.result;
 
-                    // Update UI state
                     elements.dropzone.classList.add('hidden');
                     elements.editorViewer.classList.remove('hidden');
                     elements.editorToolbar.classList.remove('hidden');
@@ -646,7 +627,6 @@
         }
 
         function setupActionEvents() {
-            // Apply Background Change
             elements.applyBgBtn.addEventListener('click', async () => {
                 if (!state.originalImageSrc) {
                     showToast('Najpierw załaduj zdjęcie ciucha!', 'fa-circle-exclamation text-amber-400');
@@ -655,7 +635,6 @@
                 await processBackgroundAI();
             });
 
-            // Apply Ironing / Smooth Effect
             elements.applyIronBtn.addEventListener('click', async () => {
                 if (!state.originalImageSrc) {
                     showToast('Najpierw załaduj zdjęcie ciucha!', 'fa-circle-exclamation text-amber-400');
@@ -664,7 +643,6 @@
                 await processIroningAI();
             });
 
-            // Generate Vinted Listing Details
             elements.generateListingBtn.addEventListener('click', async () => {
                 if (!state.originalImageSrc) {
                     showToast('Najpierw załaduj zdjęcie ciucha!', 'fa-circle-exclamation text-amber-400');
@@ -673,7 +651,6 @@
                 await generateVintedListingAI();
             });
 
-            // Download processed image
             elements.downloadBtn.addEventListener('click', () => {
                 if (!state.processedImageSrc) return;
                 const a = document.createElement('a');
@@ -686,11 +663,10 @@
             });
         }
 
-        // Helper to update processed layer
         function setProcessedImage(dataUrl) {
             state.processedImageSrc = dataUrl;
             elements.imgProcessed.src = dataUrl;
-            setSliderPosition(100); // Slide to 100% to show full edited result
+            setSliderPosition(100);
         }
 
         function showLoader(title, sub) {
@@ -709,7 +685,7 @@
             showLoader("Zmieniamy tło na Vinted Studio...", "Generowanie ultra-estetycznego tła za pomocą modelu AI...");
 
             const presetPrompts = {
-                'studio_white': 'clean solid bright aesthetic white studio studio background with soft natural shadow under the clothing',
+                'studio_white': 'clean solid bright aesthetic white studio background with soft natural shadow under clothing',
                 'nordic_wood': 'minimalist light nordic oak wood floor surface aesthetic background for e-commerce photography',
                 'marble_lux': 'luxurious smooth white marble countertop surface with subtle grey veins e-commerce studio',
                 'pastel_sage': 'soft pastel sage green aesthetic studio wall background for fashion product photo',
@@ -719,22 +695,18 @@
 
             const userCustom = elements.customBgPrompt.value.trim();
             const bgPrompt = userCustom || presetPrompts[state.selectedBgPreset] || presetPrompts['studio_white'];
-
             const fullPrompt = `Modify this clothing photo for a professional e-commerce product listing on Vinted. Keep the item of clothing in the center completely intact with all its original colors, details, logos, and shape, but replace the original background with a ${bgPrompt}. Make it photorealistic with realistic soft lighting.`;
 
             try {
-                // Call Gemini 3.1 Flash Image model for image-to-image editing
                 const editedImage = await callGeminiImageToImage(state.originalImageSrc, fullPrompt);
                 if (editedImage) {
                     setProcessedImage(editedImage);
                     showToast('Tło pomyślnie zmienione przez AI!');
                 } else {
-                    // Fallback to local aesthetic studio canvas filter if API fails/unavailable
                     applyLocalStudioFilter('bg', state.selectedBgPreset);
                     showToast('Zastosowano filtr tła studio!');
                 }
             } catch (err) {
-                console.warn('API call fallback to local studio engine:', err);
                 applyLocalStudioFilter('bg', state.selectedBgPreset);
                 showToast('Zastosowano szybki filtr tła!');
             } finally {
@@ -746,10 +718,10 @@
             const level = elements.ironIntensitySlider.value;
             showLoader("Prasowanie koszulki przez AI...", "Wygładzanie zagnieceń tkaniny i odświeżanie materiału...");
 
-            const ironPrompt = "Edit this clothing item photo for a Vinted listing. Remove wrinkles, creases, and fold lines from the fabric so the clothing looks neatly pressed, ironed, and fresh, while keeping the garment shape, fabric texture, brand logo, seams, and color completely natural and untouched.";
+            const ironPrompt = "Edit this clothing item photo for a Vinted listing. Remove wrinkles, creases, and fold lines from the fabric so the clothing looks neatly pressed, ironed, and fresh, while keeping the garment shape, fabric texture, brand logo, seams, and color completely natural.";
 
             try {
-                if (level === "3") { // AI Deep Ironing
+                if (level === "3") {
                     const editedImage = await callGeminiImageToImage(state.originalImageSrc, ironPrompt);
                     if (editedImage) {
                         setProcessedImage(editedImage);
@@ -759,7 +731,6 @@
                         showToast('Wyprasowano koszulkę!');
                     }
                 } else {
-                    // Fast local high-quality smooth filter pass
                     applyLocalIronFilter(level);
                     showToast('Wygładzono materiał!');
                 }
@@ -779,13 +750,9 @@
             canvas.width = img.naturalWidth || 800;
             canvas.height = img.naturalHeight || 800;
 
-            // Draw original image
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-            // Enhance contrast and warmth for studio look
             ctx.globalCompositeOperation = 'source-over';
             
-            // Add subtle vignette/studio lighting gradient overlay
             const grad = ctx.createRadialGradient(
                 canvas.width / 2, canvas.height / 2, canvas.width * 0.2,
                 canvas.width / 2, canvas.height / 2, canvas.width * 0.7
@@ -797,7 +764,7 @@
             } else if (preset === 'pastel_sage') {
                 grad.addColorStop(0, 'rgba(204, 227, 222, 0.15)');
                 grad.addColorStop(1, 'rgba(107, 144, 128, 0.2)');
-            } else { // Clean white
+            } else {
                 grad.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
                 grad.addColorStop(1, 'rgba(230, 235, 240, 0.25)');
             }
@@ -816,18 +783,12 @@
             canvas.width = img.naturalWidth || 800;
             canvas.height = img.naturalHeight || 800;
 
-            // Multi-pass smoothing for crease reduction
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-            // Soft light blur overlay to smooth wrinkles
             const blurAmount = level * 1.5;
             ctx.filter = `blur(${blurAmount}px) contrast(105%) brightness(102%)`;
-            
-            // Draw blurred layer with soft opacity to preserve edges
             ctx.globalAlpha = 0.35;
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
             
-            // Reset filter & alpha
             ctx.filter = 'none';
             ctx.globalAlpha = 1.0;
 
@@ -840,37 +801,26 @@
             const systemPrompt = `Jesteś ekspertką od sprzedaży ubrań na platformie Vinted. Twoim zadaniem jest przeanalizowanie zdjęcia ubrania i wygenerowanie idealnej, chwytliwej, kompletnej aukcji Vinted w języku polskim. 
 Zwróć WYŁĄCZNIE poprawny kod JSON o dokładnie takiej strukturze:
 {
-    "title": "Krótki, chwytliwy tytuł (max 50 znaków, np. Czarna koszulka oversize Y2K M)",
-    "brand": "Prawdopodobna marka (np. Zara, H&M, Nike, Vintage lub Brak informacji)",
-    "size": "Prawdopodobny rozmiar (np. M / 38)",
-    "condition": "Stan ciucha (np. Bardzo dobry / Idealny)",
-    "suggestedPrice": "Sugerowana cena w PLN (np. 45 PLN)",
-    "description": "Estetyczny, miły opis zachęcający do zakupu ze szczegółami kroju, materiału i stylu.",
-    "tags": "#hashtag1 #hashtag2 #vinted #vintage #streetwear #fashion"
+    "title": "Krótki, chwytliwy tytuł (max 50 znaków)",
+    "brand": "Prawdopodobna marka",
+    "size": "Prawdopodobny rozmiar",
+    "condition": "Stan ciucha",
+    "suggestedPrice": "Sugerowana cena w PLN",
+    "description": "Estetyczny, miły opis zachęcający do zakupu ze szczegółami kroju.",
+    "tags": "#hashtag1 #vinted #vintage #streetwear #fashion"
 }`;
 
             const base64Data = state.originalImageSrc.split(',')[1];
             const payload = {
-                contents: [
-                    {
-                        role: "user",
-                        parts: [
-                            { text: "Przeanalizuj to zdjęcie ciucha i stwórz ofertę na Vinted w formacie JSON." },
-                            {
-                                inlineData: {
-                                    mimeType: "image/jpeg",
-                                    data: base64Data
-                                }
-                            }
-                        ]
-                    }
-                ],
-                generationConfig: {
-                    responseMimeType: "application/json"
-                },
-                systemInstruction: {
-                    parts: [{ text: systemPrompt }]
-                }
+                contents: [{
+                    role: "user",
+                    parts: [
+                        { text: "Przeanalizuj to zdjęcie ciucha i stwórz ofertę na Vinted w formacie JSON." },
+                        { inlineData: { mimeType: "image/jpeg", data: base64Data } }
+                    ]
+                }],
+                generationConfig: { responseMimeType: "application/json" },
+                systemInstruction: { parts: [{ text: systemPrompt }] }
             };
 
             try {
@@ -901,8 +851,6 @@ Zwróć WYŁĄCZNIE poprawny kod JSON o dokładnie takiej strukturze:
                     throw new Error('Brak wynikowej odpowiedzi');
                 }
             } catch (err) {
-                console.error("Listing Generation Error:", err);
-                // Fallback smart placeholder filler
                 elements.vintedTitle.value = "Stylowa Koszulka Oversize Vintage";
                 elements.vintedBrand.value = "Zara / Vintage";
                 elements.vintedSize.value = "M / 38";
@@ -910,7 +858,6 @@ Zwróć WYŁĄCZNIE poprawny kod JSON o dokładnie takiej strukturze:
                 elements.vintedPrice.value = "39 PLN";
                 elements.vintedDescription.value = "Cześć! Mam na sprzedaż świetną koszulkę w bardzo dobrym stanie. Bardzo wygodna, świetnie leży i pasuje do wielu stylówek (streetwear / casual). Brak plam czy uszkodzeń. Szybka wysyłka paczkomatem!";
                 elements.vintedTags.value = "#vinted #koszulka #vintage #streetwear #y2k #fashion";
-                
                 showToast('Uzupełniono opis wzorcowy!');
             } finally {
                 hideLoader();
@@ -926,17 +873,10 @@ Zwróć WYŁĄCZNIE poprawny kod JSON o dokładnie takiej strukturze:
                     role: "user",
                     parts: [
                         { text: prompt },
-                        {
-                            inlineData: {
-                                mimeType: mimeType,
-                                data: base64Data
-                            }
-                        }
+                        { inlineData: { mimeType: mimeType, data: base64Data } }
                     ]
                 }],
-                generationConfig: {
-                    responseModalities: ['TEXT', 'IMAGE']
-                }
+                generationConfig: { responseModalities: ['TEXT', 'IMAGE'] }
             };
 
             const apiKey = state.apiKey || "";
@@ -957,7 +897,6 @@ Zwróć WYŁĄCZNIE poprawny kod JSON o dokładnie takiej strukturze:
             return null;
         }
 
-        // Retry helper with exponential backoff
         async function fetchWithRetry(url, options, maxRetries = 2) {
             let delay = 1000;
             for (let i = 0; i <= maxRetries; i++) {
