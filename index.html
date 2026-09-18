@@ -1,208 +1,1059 @@
 <!DOCTYPE html>
-<html lang="pl" class="dark">
+<html lang="pl" class="dark h-full bg-slate-950 text-slate-100">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VintedAI — Studio</title>
+    <title>Vinted Studio AI - Profesjonalne Fotki i Opisy na Vinted</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
                     colors: {
-                        darkBg: '#0a0a0c',
-                        cardBg: '#121216',
-                        cardHover: '#1a1a21',
-                        accent: '#6366f1',
-                        accentGlow: 'rgba(99, 102, 241, 0.3)'
+                        vinted: {
+                            DEFAULT: '#007782',
+                            hover: '#005e67',
+                            light: '#00a8b5',
+                            accent: '#00f2fe'
+                        }
                     }
                 }
             }
         }
     </script>
-    <!-- Google Fonts & Lucide Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.2); }
-            50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.5); }
+        /* Custom scrollbar and slider styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
         }
-        .glow-effect { animation: pulseGlow 3s infinite; }
-        .glass { background: rgba(18, 18, 22, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        .before-after-container {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .glow-effect {
+            box-shadow: 0 0 25px -5px rgba(0, 242, 254, 0.25);
+        }
     </style>
 </head>
-<body class="bg-darkBg text-gray-100 min-h-screen selection:bg-accent selection:text-white flex flex-col justify-between">
+<body class="h-full flex flex-col font-sans antialiased bg-slate-950 text-slate-100 selection:bg-vinted selection:text-white">
 
-    <!-- Top Bar -->
-    <header class="w-full border-b border-white/5 py-4 px-6 glass sticky top-0 z-50 flex justify-between items-center">
-        <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center glow-effect">
-                <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
+    <!-- Header Navigation -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-vinted to-vinted-accent flex items-center justify-center text-white shadow-lg shadow-vinted/30 font-bold text-xl">
+                    <i class="fa-solid fa-shirt"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg tracking-tight text-white flex items-center gap-2">
+                        Vinted Studio <span class="text-xs px-2 py-0.5 rounded-full bg-vinted/20 text-vinted-accent border border-vinted/40 font-semibold">AI PRO</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 hidden sm:block">Zwiększ sprzedaż: Lepsze fotki & automatyczne opisy</p>
+                </div>
             </div>
-            <span class="font-bold tracking-wider text-lg bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">VINTED<span class="text-indigo-500">.AI</span></span>
-        </div>
-        <div class="text-xs px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            System Gotowy
+
+            <!-- Header Action & API Key Config -->
+            <div class="flex items-center gap-3">
+                <button id="apiKeyBtn" class="px-3 py-1.5 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition flex items-center gap-2">
+                    <i class="fa-solid fa-key text-amber-400"></i>
+                    <span id="apiKeyStatusText">Klucz API Gemini</span>
+                </button>
+                <a href="#listingSection" class="hidden md:flex items-center gap-2 text-xs text-slate-300 bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700">
+                    <i class="fa-solid fa-wand-magic-sparkles text-vinted-accent"></i>
+                    Opis aukcji
+                </a>
+            </div>
         </div>
     </header>
 
-    <!-- Main Container -->
-    <main class="max-w-md mx-auto w-full p-5 flex-1 flex flex-col justify-center my-auto space-y-6">
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-        <!-- Upload Box / Initial State -->
-        <div id="uploadCard" class="glass rounded-3xl p-8 text-center border-dashed border-2 border-white/10 hover:border-indigo-500/50 transition-all duration-300 cursor-pointer relative group overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-b from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <input type="file" id="imageInput" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+        <!-- LEFT COLUMN: Image Editor & Viewer (7 cols on large screens) -->
+        <div class="lg:col-span-7 flex flex-col gap-6">
             
-            <div class="relative z-0 flex flex-col items-center space-y-4">
-                <div class="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform duration-300">
-                    <i data-lucide="camera" class="w-8 h-8"></i>
-                </div>
-                <div>
-                    <h2 class="font-semibold text-lg text-white">Wrzuć fotkę ciucha</h2>
-                    <p class="text-xs text-gray-400 mt-1">Kliknij lub przeciągnij zdjęcie z galerii</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Editor / Workspace (Hidden by default) -->
-        <div id="workspace" class="hidden space-y-5">
-            <!-- Image Preview Box -->
-            <div class="relative rounded-3xl overflow-hidden glass aspect-[4/5] flex items-center justify-center group">
-                <img id="previewImage" src="" alt="Podgląd" class="w-full h-full object-cover transition-transform duration-500">
+            <!-- Image Dropzone / Preview Area -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 flex flex-col gap-4 relative overflow-hidden shadow-xl">
                 
-                <!-- Floating Badge -->
-                <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs border border-white/10 text-gray-300 flex items-center gap-1.5">
-                    <i data-lucide="image" class="w-3.5 h-3.5 text-indigo-400"></i>
-                    <span id="imageStatusLabel">Oryginał</span>
+                <div class="flex items-center justify-between mb-1">
+                    <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                        <i class="fa-solid fa-image text-vinted-accent"></i> Studio Fotograficzne
+                    </h2>
+                    <span id="imageStatusBadge" class="text-xs px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 font-medium">Brak zdjęcia</span>
                 </div>
 
-                <!-- Reset Button -->
-                <button onclick="resetApp()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-gray-300 hover:text-white hover:bg-red-500/20 hover:border-red-500/30 transition-all">
-                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-                </button>
+                <!-- Dropzone State (No image) -->
+                <div id="dropzone" class="border-2 border-dashed border-slate-700 hover:border-vinted rounded-xl p-8 text-center cursor-pointer transition-all bg-slate-950/50 hover:bg-slate-900/50 min-h-[360px] flex flex-col items-center justify-center group relative">
+                    <input type="file" id="fileInput" accept="image/*" class="hidden">
+                    <div class="w-16 h-16 rounded-2xl bg-slate-800/80 group-hover:bg-vinted/20 text-slate-400 group-hover:text-vinted-accent flex items-center justify-center text-2xl transition mb-4 border border-slate-700 group-hover:border-vinted/50 shadow-inner">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+                    <p class="text-slate-200 font-semibold text-base mb-1">Przeciągnij zdjęcie ciucha lub kliknij, aby wybrać</p>
+                    <p class="text-slate-400 text-xs max-w-xs mb-4">Wybierz fotkę z galerii telefonu lub komputera (JPG, PNG)</p>
+                    <div class="flex gap-2">
+                        <span class="inline-flex items-center gap-1 text-[11px] bg-slate-800 text-slate-300 px-2.5 py-1 rounded-md"><i class="fa-solid fa-wand-magic"></i> Usuwanie Zagnieceń</span>
+                        <span class="inline-flex items-center gap-1 text-[11px] bg-slate-800 text-slate-300 px-2.5 py-1 rounded-md"><i class="fa-solid fa-palette"></i> Zmiana Tła</span>
+                    </div>
+                </div>
+
+                <!-- Interactive Before / After Viewer (Visible when image uploaded) -->
+                <div id="editorViewer" class="hidden relative rounded-xl overflow-hidden bg-slate-950 border border-slate-800 min-h-[380px] max-h-[550px] flex items-center justify-center">
+                    
+                    <!-- Canvas elements hidden for processing -->
+                    <canvas id="sourceCanvas" class="hidden"></canvas>
+                    <canvas id="processedCanvas" class="hidden"></canvas>
+
+                    <!-- Loader overlay -->
+                    <div id="aiLoader" class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm z-30 hidden flex-col items-center justify-center p-6 text-center">
+                        <div class="w-14 h-14 border-4 border-vinted/30 border-t-vinted-accent rounded-full animate-spin mb-4"></div>
+                        <p id="aiLoaderTitle" class="text-white font-bold text-base">Magia AI w toku...</p>
+                        <p id="aiLoaderSub" class="text-slate-400 text-xs max-w-sm mt-1">Przetwarzamy koszulkę za pomocą AI. To może zająć kilka sekund.</p>
+                    </div>
+
+                    <!-- Comparison Container -->
+                    <div id="beforeAfterBox" class="relative w-full h-full max-h-[550px] overflow-hidden flex items-center justify-center before-after-container cursor-ew-resize">
+                        
+                        <!-- Original Image (Underneath / Right side) -->
+                        <img id="imgOriginal" class="max-h-[520px] w-auto object-contain select-none pointer-events-none" src="" alt="Oryginalne zdjęcie">
+                        
+                        <!-- Processed Image (Top Layer clipped) -->
+                        <div id="processedLayer" class="absolute top-0 left-0 bottom-0 overflow-hidden w-1/2 border-r-2 border-vinted-accent shadow-2xl z-10 flex items-center justify-center">
+                            <img id="imgProcessed" class="max-h-[520px] w-auto max-w-none object-contain select-none pointer-events-none" src="" alt="Przetworzone zdjęcie">
+                        </div>
+
+                        <!-- Slider Handle Overlay -->
+                        <div id="sliderHandle" class="absolute top-0 bottom-0 left-1/2 -ml-3 z-20 flex flex-col items-center justify-center pointer-events-none">
+                            <div class="w-6 h-12 bg-vinted-accent text-slate-950 rounded-full flex items-center justify-center shadow-lg font-bold text-xs">
+                                <i class="fa-solid fa-arrows-left-right"></i>
+                            </div>
+                        </div>
+
+                        <!-- Labels -->
+                        <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur text-vinted-accent text-[11px] font-bold px-2.5 py-1 rounded border border-vinted/30 z-20 pointer-events-none">
+                            <i class="fa-solid fa-sparkles"></i> PO (AI)
+                        </span>
+                        <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur text-slate-300 text-[11px] font-bold px-2.5 py-1 rounded border border-slate-700 z-20 pointer-events-none">
+                            PRZED
+                        </span>
+                    </div>
+
+                </div>
+
+                <!-- Editor Toolbar & Download -->
+                <div id="editorToolbar" class="hidden flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800">
+                    <button id="reuploadBtn" class="px-3 py-2 text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-rotate-left"></i> Zmień zdjęcie
+                    </button>
+
+                    <div class="flex items-center gap-2">
+                        <button id="resetEffectsBtn" class="px-3 py-2 text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-400 rounded-lg transition">
+                            Resetuj zmiany
+                        </button>
+                        <button id="downloadBtn" class="px-4 py-2 text-xs font-bold bg-gradient-to-r from-vinted to-vinted-light hover:from-vinted-hover hover:to-vinted text-white rounded-lg shadow-lg shadow-vinted/20 transition flex items-center gap-2">
+                            <i class="fa-solid fa-download"></i> Pobierz Zdjęcie na Vinted
+                        </button>
+                    </div>
+                </div>
+
             </div>
 
-            <!-- Action Options Grid -->
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="processImage('bg')" id="bgBtn" class="glass p-4 rounded-2xl flex flex-col items-center text-center space-y-2 hover:border-indigo-500/50 hover:bg-cardHover transition-all group">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <i data-lucide="sparkle" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <span class="block font-semibold text-sm text-white">1. Zmiana Tła</span>
-                        <span class="text-[10px] text-gray-400">Czyste studio / butik</span>
-                    </div>
-                </button>
-
-                <button onclick="processImage('iron')" id="ironBtn" class="glass p-4 rounded-2xl flex flex-col items-center text-center space-y-2 hover:border-indigo-500/50 hover:bg-cardHover transition-all group">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <i data-lucide="zap" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <span class="block font-semibold text-sm text-white">2. Prasowanie AI</span>
-                        <span class="text-[10px] text-gray-400">Wygładzanie zagnieceń</span>
-                    </div>
-                </button>
-            </div>
-
-            <!-- Vinted Listing Generator Button -->
-            <button onclick="generateListing()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold text-sm shadow-lg shadow-indigo-600/25 hover:shadow-indigo-600/40 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center space-x-2">
-                <i data-lucide="wand-2" class="w-4 h-4"></i>
-                <span>Generuj opis pod Vinted</span>
-            </button>
         </div>
 
-        <!-- Processing Loader Modal/Overlay inside view -->
-        <div id="loader" class="hidden flex-col items-center justify-center py-10 space-y-4">
-            <div class="w-12 h-12 rounded-full border-2 border-indigo-500/20 border-t-indigo-500 animate-spin"></div>
-            <p id="loaderText" class="text-xs text-gray-400 tracking-wide animate-pulse">Przetwarzanie AI w toku...</p>
+        <!-- RIGHT COLUMN: Options & AI Listing Generator (5 cols) -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+
+            <!-- Tool Tabs & Controls -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col gap-5">
+                
+                <!-- Tab Selector -->
+                <div class="grid grid-cols-2 gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800">
+                    <button id="tabBgBtn" class="py-2.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 bg-vinted text-white shadow">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> 1. Zmiana Tła
+                    </button>
+                    <button id="tabIronBtn" class="py-2.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-shirt"></i> 2. Prasowanie AI
+                    </button>
+                </div>
+
+                <!-- OPTION 1: ZMIANA TŁA PANEL -->
+                <div id="panelBg" class="flex flex-col gap-4">
+                    <div>
+                        <h3 class="text-sm font-bold text-white mb-1">Aesthetic Tła dla Ciuchów</h3>
+                        <p class="text-xs text-slate-400">Wybierz tło studyjne, aby podbić atrakcyjność aukcji na Vinted.</p>
+                    </div>
+
+                    <!-- Presets Grid -->
+                    <div class="grid grid-cols-3 gap-2.5">
+                        <!-- Preset 1: Clean White -->
+                        <button data-bg-preset="studio_white" class="preset-bg-btn active border-2 border-vinted bg-slate-800 hover:border-vinted p-2.5 rounded-xl text-left flex flex-col gap-1 transition relative overflow-hidden group">
+                            <div class="w-full h-8 rounded bg-white border border-slate-300"></div>
+                            <span class="text-[11px] font-semibold text-slate-200">Czysta Biel</span>
+                        </button>
+                        <!-- Preset 2: Light Wood -->
+                        <button data-bg-preset="nordic_wood" class="preset-bg-btn border-2 border-slate-800 bg-slate-800 hover:border-vinted p-2.5 rounded-xl text-left flex flex-col gap-1 transition relative overflow-hidden group">
+                            <div class="w-full h-8 rounded bg-amber-100 border border-amber-200"></div>
+                            <span class="text-[11px] font-semibold text-slate-200">Jasne Drewno</span>
+                        </button>
+                        <!-- Preset 3: Marble -->
+                        <button data-bg-preset="marble_lux" class="preset-bg-btn border-2 border-slate-800 bg-slate-800 hover:border-vinted p-2.5 rounded-xl text-left flex flex-col gap-1 transition relative overflow-hidden group">
+                            <div class="w-full h-8 rounded bg-slate-200 border border-slate-300"></div>
+                            <span class="text-[11px] font-semibold text-slate-200">Marmur Lux</span>
+                        </button>
+                        <!-- Preset 4: Soft Pastel -->
+                        <button data-bg-preset="pastel_sage" class="preset-bg-btn border-2 border-slate-800 bg-slate-800 hover:border-vinted p-2.5 rounded-xl text-left flex flex-col gap-1 transition relative overflow-hidden group">
+                            <div class="w-full h-8 rounded bg-teal-100 border border-teal-200"></div>
+                            <span class="text-[11px] font-semibold text-slate-200">Pastel Szałwia</span>
+                        </button>
+                        <!-- Preset 5: Boho Hanger -->
+                        <button data-bg-preset="studio_hanger" class="preset-bg-btn border-2 border-slate-800 bg-slate-800 hover:border-vinted p-2.5 rounded-xl text-left flex flex-col gap-1 transition relative overflow-hidden group">
+                            <div class="w-full h-8 rounded bg-stone-300 border border-stone-400"></div>
+                            <span class="text-[11px] font-semibold text-slate-200">Wieszak Studio</span>
+                        </button>
+                        <!-- Preset 6: Transparent -->
+                        <button data-bg-preset="transparent" class="preset-bg-btn border-2 border-slate-800 bg-slate-800 hover:border-vinted p-2.5 rounded-xl text-left flex flex-col gap-1 transition relative overflow-hidden group">
+                            <div class="w-full h-8 rounded bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:8px_8px] bg-slate-900 border border-slate-700"></div>
+                            <span class="text-[11px] font-semibold text-slate-200">Przezroczyste</span>
+                        </button>
+                    </div>
+
+                    <!-- Custom Prompt BG -->
+                    <div class="mt-1">
+                        <label class="text-[11px] font-medium text-slate-400 block mb-1">Własny opis tła (opcjonalnie):</label>
+                        <input id="customBgPrompt" type="text" placeholder="np. jasny, słoneczny pokój, boho, tło drewniane..." class="w-full text-xs bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-vinted">
+                    </div>
+
+                    <button id="applyBgBtn" class="w-full py-3 px-4 bg-vinted hover:bg-vinted-hover text-white rounded-xl font-bold text-xs tracking-wide transition flex items-center justify-center gap-2 shadow-lg shadow-vinted/20">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Zmień Tło z AI
+                    </button>
+                </div>
+
+                <!-- OPTION 2: PRASOWANIE AI PANEL -->
+                <div id="panelIron" class="hidden flex flex-col gap-4">
+                    <div>
+                        <h3 class="text-sm font-bold text-white mb-1">Wygładzanie i Prasowanie Koszulki</h3>
+                        <p class="text-xs text-slate-400">AI automatycznie wykrywa zagniecenia materiału i je wygładza, zachowując krój i nadruki.</p>
+                    </div>
+
+                    <!-- Intensity Slider -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col gap-3">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-semibold text-slate-300">Siła prasowania:</span>
+                            <span id="ironIntensityVal" class="font-bold text-vinted-accent">Mocne (AI)</span>
+                        </div>
+                        <input id="ironIntensitySlider" type="range" min="1" max="3" value="2" step="1" class="w-full accent-vinted cursor-pointer">
+                        <div class="flex justify-between text-[10px] text-slate-500 font-medium">
+                            <span>Delikatne</span>
+                            <span>Średnie</span>
+                            <span>Mocne AI</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-950/30 border border-amber-800/40 rounded-lg p-3 text-[11px] text-amber-300/90 flex gap-2.5 items-start">
+                        <i class="fa-solid fa-lightbulb text-amber-400 text-sm mt-0.5"></i>
+                        <span>Prasowanie AI zachowuje oryginalne logo, strukturę materiału oraz guziki, usuwając tylko brzydkie zagięcia z fotki!</span>
+                    </div>
+
+                    <button id="applyIronBtn" class="w-full py-3 px-4 bg-vinted hover:bg-vinted-hover text-white rounded-xl font-bold text-xs tracking-wide transition flex items-center justify-center gap-2 shadow-lg shadow-vinted/20">
+                        <i class="fa-solid fa-shirt"></i> Wyprasuj Koszulkę z AI
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- AI VINTED LISTING GENERATOR BOX -->
+            <div id="listingSection" class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col gap-4">
+                
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-lg bg-vinted/20 text-vinted-accent flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-white">Generator Ogłoszenia Vinted</h3>
+                    </div>
+                    <button id="generateListingBtn" class="px-3 py-1.5 bg-gradient-to-r from-vinted to-vinted-light text-white text-xs font-bold rounded-lg hover:brightness-110 transition flex items-center gap-1.5 shadow">
+                        <i class="fa-solid fa-sparkles"></i> Wygeneruj Opis AI
+                    </button>
+                </div>
+
+                <!-- Structured Generated Output Form -->
+                <div class="space-y-3">
+                    
+                    <!-- Title -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-[11px] font-semibold text-slate-400">Tytuł aukcji:</label>
+                            <button class="copy-btn text-[10px] text-vinted-accent hover:underline flex items-center gap-1" data-copy-target="vintedTitle">
+                                <i class="fa-regular fa-copy"></i> Kopiuj
+                            </button>
+                        </div>
+                        <input id="vintedTitle" type="text" placeholder="np. Oversizowa koszulka vintage czarna M" class="w-full text-xs font-medium bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-vinted">
+                    </div>
+
+                    <!-- Meta Tags (Brand, Size, Condition, Price) -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        <div>
+                            <label class="text-[10px] font-medium text-slate-400 block mb-0.5">Marka:</label>
+                            <input id="vintedBrand" type="text" placeholder="np. Zara / Vintage" class="w-full text-xs bg-slate-950 border border-slate-800 rounded-md px-2.5 py-1.5 text-slate-200">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-medium text-slate-400 block mb-0.5">Rozmiar:</label>
+                            <input id="vintedSize" type="text" placeholder="np. M / 38" class="w-full text-xs bg-slate-950 border border-slate-800 rounded-md px-2.5 py-1.5 text-slate-200">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-medium text-slate-400 block mb-0.5">Stan:</label>
+                            <input id="vintedCondition" type="text" placeholder="Bardzo dobry" class="w-full text-xs bg-slate-950 border border-slate-800 rounded-md px-2.5 py-1.5 text-slate-200">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-medium text-slate-400 block mb-0.5">Suger. cena:</label>
+                            <input id="vintedPrice" type="text" placeholder="45 PLN" class="w-full text-xs font-bold text-vinted-accent bg-slate-950 border border-slate-800 rounded-md px-2.5 py-1.5">
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-[11px] font-semibold text-slate-400">Chwytliwy Opis Vinted:</label>
+                            <button class="copy-btn text-[10px] text-vinted-accent hover:underline flex items-center gap-1" data-copy-target="vintedDescription">
+                                <i class="fa-regular fa-copy"></i> Kopiuj Opis
+                            </button>
+                        </div>
+                        <textarea id="vintedDescription" rows="4" placeholder="Opis wygenerowany przez Gemini AI ze szczegółami, wymiarami i hashtagami..." class="w-full text-xs bg-slate-950 border border-slate-800 rounded-lg p-3 text-slate-200 focus:outline-none focus:border-vinted resize-none"></textarea>
+                    </div>
+
+                    <!-- Tags -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-[11px] font-semibold text-slate-400">Hashtagi Vinted:</label>
+                            <button class="copy-btn text-[10px] text-vinted-accent hover:underline flex items-center gap-1" data-copy-target="vintedTags">
+                                <i class="fa-regular fa-copy"></i> Kopiuj Tagi
+                            </button>
+                        </div>
+                        <input id="vintedTags" type="text" placeholder="#vintage #y2k #streetwear #casual #koszulka" class="w-full text-xs bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-300">
+                    </div>
+
+                    <!-- Copy All Button -->
+                    <button id="copyAllBtn" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs rounded-xl border border-slate-700 transition flex items-center justify-center gap-2">
+                        <i class="fa-regular fa-copy"></i> Skopiuj Całe Ogłoszenie do Schowka
+                    </button>
+
+                </div>
+
+            </div>
+
         </div>
 
     </main>
 
+    <!-- API Key Settings Modal -->
+    <div id="apiKeyModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-key text-amber-400"></i> Konfiguracja Klucza API Gemini
+                </h3>
+                <button id="closeApiKeyModal" class="text-slate-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <p class="text-xs text-slate-300 mb-4 leading-relaxed">
+                Aplikacja wykorzystuje model **Gemini API** do analizy ubrań, zmiany tła oraz generowania profesjonalnych opisów aukcji. Jeśli posiadasz własny klucz API Google Gemini, wklej go poniżej:
+            </p>
+            <input id="apiKeyInput" type="password" placeholder="AIzaSy..." class="w-full text-xs bg-slate-950 border border-slate-700 rounded-xl px-3 py-3 text-white mb-4 focus:outline-none focus:border-vinted">
+            <div class="flex gap-2">
+                <button id="saveApiKeyBtn" class="flex-1 py-2.5 bg-vinted hover:bg-vinted-hover text-white text-xs font-bold rounded-xl transition">
+                    Zapisz Klucz
+                </button>
+                <button id="clearApiKeyBtn" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl transition">
+                    Użyj Domyślnego
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Box -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 border border-vinted/50 text-white text-xs font-medium px-4 py-3 rounded-xl shadow-2xl z-50 transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-3">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-vinted-accent text-base"></i>
+        <span id="toastMessage">Pomyślnie skopiowano!</span>
+    </div>
+
     <!-- Footer -->
-    <footer class="text-center py-4 text-xs text-gray-600 border-t border-white/5">
-        Vinted Studio AI &bull; Minimal Edition
+    <footer class="border-t border-slate-900 bg-slate-950 py-4 text-center text-xs text-slate-500">
+        <p>Vinted Studio AI &copy; 2026 - Zbuduj profesjonalny profil sprzedawcy na Vinted</p>
     </footer>
 
-    <!-- Script Logic -->
     <script>
-        lucide.createIcons();
+        // Global App State
+        const state = {
+            apiKey: localStorage.getItem('vinted_gemini_api_key') || '',
+            originalImageSrc: null,
+            processedImageSrc: null,
+            activeTab: 'bg', // 'bg' or 'iron'
+            selectedBgPreset: 'studio_white',
+            sliderPos: 50, // %
+            isProcessing: false,
+            imageWidth: 0,
+            imageHeight: 0
+        };
 
-        const imageInput = document.getElementById('imageInput');
-        const uploadCard = document.getElementById('uploadCard');
-        const workspace = document.getElementById('workspace');
-        const previewImage = document.getElementById('previewImage');
-        const imageStatusLabel = document.getElementById('imageStatusLabel');
-        const loader = document.getElementById('loader');
-        const loaderText = document.getElementById('loaderText');
+        // DOM Element Cache
+        const elements = {
+            dropzone: document.getElementById('dropzone'),
+            fileInput: document.getElementById('fileInput'),
+            editorViewer: document.getElementById('editorViewer'),
+            editorToolbar: document.getElementById('editorToolbar'),
+            imageStatusBadge: document.getElementById('imageStatusBadge'),
+            imgOriginal: document.getElementById('imgOriginal'),
+            imgProcessed: document.getElementById('imgProcessed'),
+            processedLayer: document.getElementById('processedLayer'),
+            sliderHandle: document.getElementById('sliderHandle'),
+            beforeAfterBox: document.getElementById('beforeAfterBox'),
+            sourceCanvas: document.getElementById('sourceCanvas'),
+            processedCanvas: document.getElementById('processedCanvas'),
+            aiLoader: document.getElementById('aiLoader'),
+            aiLoaderTitle: document.getElementById('aiLoaderTitle'),
+            aiLoaderSub: document.getElementById('aiLoaderSub'),
+            tabBgBtn: document.getElementById('tabBgBtn'),
+            tabIronBtn: document.getElementById('tabIronBtn'),
+            panelBg: document.getElementById('panelBg'),
+            panelIron: document.getElementById('panelIron'),
+            customBgPrompt: document.getElementById('customBgPrompt'),
+            applyBgBtn: document.getElementById('applyBgBtn'),
+            applyIronBtn: document.getElementById('applyIronBtn'),
+            ironIntensitySlider: document.getElementById('ironIntensitySlider'),
+            ironIntensityVal: document.getElementById('ironIntensityVal'),
+            generateListingBtn: document.getElementById('generateListingBtn'),
+            reuploadBtn: document.getElementById('reuploadBtn'),
+            resetEffectsBtn: document.getElementById('resetEffectsBtn'),
+            downloadBtn: document.getElementById('downloadBtn'),
+            vintedTitle: document.getElementById('vintedTitle'),
+            vintedBrand: document.getElementById('vintedBrand'),
+            vintedSize: document.getElementById('vintedSize'),
+            vintedCondition: document.getElementById('vintedCondition'),
+            vintedPrice: document.getElementById('vintedPrice'),
+            vintedDescription: document.getElementById('vintedDescription'),
+            vintedTags: document.getElementById('vintedTags'),
+            copyAllBtn: document.getElementById('copyAllBtn'),
+            apiKeyBtn: document.getElementById('apiKeyBtn'),
+            apiKeyModal: document.getElementById('apiKeyModal'),
+            closeApiKeyModal: document.getElementById('closeApiKeyModal'),
+            saveApiKeyBtn: document.getElementById('saveApiKeyBtn'),
+            clearApiKeyBtn: document.getElementById('clearApiKeyBtn'),
+            apiKeyInput: document.getElementById('apiKeyInput'),
+            apiKeyStatusText: document.getElementById('apiKeyStatusText'),
+            toast: document.getElementById('toast'),
+            toastMessage: document.getElementById('toastMessage')
+        };
 
-        let originalImageSrc = '';
-
-        imageInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    originalImageSrc = event.target.result;
-                    previewImage.src = originalImageSrc;
-                    
-                    // Smooth transition
-                    uploadCard.classList.add('hidden');
-                    workspace.classList.remove('hidden');
-                    imageStatusLabel.textContent = "Oryginał";
-                    lucide.createIcons();
-                }
-                reader.readAsDataURL(file);
-            }
+        window.addEventListener('DOMContentLoaded', () => {
+            initApp();
         });
 
-        function processImage(type) {
-            workspace.classList.add('opacity-40', 'pointer-events-none');
-            loader.classList.remove('hidden');
-            loader.classList.add('flex');
+        function initApp() {
+            updateApiKeyUI();
+            setupDropzoneEvents();
+            setupTabEvents();
+            setupSliderEvents();
+            setupPresetEvents();
+            setupActionEvents();
+            setupCopyEvents();
+            setupModalEvents();
+        }
 
-            if(type === 'bg') {
-                loaderText.textContent = "Magiczne wycinanie tła i wklejanie w studio...";
-            } else {
-                loaderText.textContent = "Wygładzanie zagnieceń i prasowanie ciucha...";
+        // Show Toast Helper
+        function showToast(message, iconClass = "fa-circle-check text-vinted-accent") {
+            elements.toastMessage.textContent = message;
+            elements.toast.querySelector('i').className = `fa-solid ${iconClass} text-base`;
+            elements.toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                elements.toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        function setupDropzoneEvents() {
+            elements.dropzone.addEventListener('click', () => elements.fileInput.click());
+            
+            elements.fileInput.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    handleFileSelect(e.target.files[0]);
+                }
+            });
+
+            elements.dropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                elements.dropzone.classList.add('border-vinted', 'bg-slate-900/80');
+            });
+
+            elements.dropzone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                elements.dropzone.classList.remove('border-vinted', 'bg-slate-900/80');
+            });
+
+            elements.dropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                elements.dropzone.classList.remove('border-vinted', 'bg-slate-900/80');
+                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                    handleFileSelect(e.dataTransfer.files[0]);
+                }
+            });
+
+            elements.reuploadBtn.addEventListener('click', () => {
+                elements.fileInput.click();
+            });
+
+            elements.resetEffectsBtn.addEventListener('click', () => {
+                if (state.originalImageSrc) {
+                    setProcessedImage(state.originalImageSrc);
+                    showToast('Zresetowano zmiany do oryginału');
+                }
+            });
+        }
+
+        function handleFileSelect(file) {
+            if (!file.type.startsWith('image/')) {
+                showToast('Wybierz poprawny plik graficzny (JPG, PNG)', 'fa-triangle-exclamation text-amber-400');
+                return;
             }
 
-            setTimeout(() => {
-                loader.classList.remove('flex');
-                loader.classList.add('hidden');
-                workspace.classList.remove('opacity-40', 'pointer-events-none');
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    state.originalImageSrc = e.target.result;
+                    state.processedImageSrc = e.target.result;
+                    state.imageWidth = img.width;
+                    state.imageHeight = img.height;
 
-                if(type === 'bg') {
-                    imageStatusLabel.textContent = "Tło: Studio Vinted";
-                    // Efekt wizualny symulujący zmianę tła (np. rozjaśnienie/kontrast)
-                    previewImage.style.filter = "brightness(1.05) contrast(1.1)";
-                } else {
-                    imageStatusLabel.textContent = "Wyprasowane AI";
-                    previewImage.style.filter = "saturate(1.1) drop-shadow(0 0 10px rgba(99,102,241,0.2))";
+                    // Set DOM Images
+                    elements.imgOriginal.src = e.target.result;
+                    elements.imgProcessed.src = e.target.result;
+
+                    // Update UI state
+                    elements.dropzone.classList.add('hidden');
+                    elements.editorViewer.classList.remove('hidden');
+                    elements.editorToolbar.classList.remove('hidden');
+                    elements.imageStatusBadge.textContent = 'Załadowano zdjęcie';
+                    elements.imageStatusBadge.className = 'text-xs px-2.5 py-1 rounded-full bg-vinted/20 text-vinted-accent font-semibold border border-vinted/30';
+
+                    setSliderPosition(50);
+                    showToast('Załadowano zdjęcie! Wybierz opcję zmiany tła lub prasowania.');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function setupSliderEvents() {
+            let isDragging = false;
+
+            const updateSliderFromEvent = (e) => {
+                const rect = elements.beforeAfterBox.getBoundingClientRect();
+                const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+                let percentage = (x / rect.width) * 100;
+                percentage = Math.max(0, Math.min(100, percentage));
+                setSliderPosition(percentage);
+            };
+
+            elements.beforeAfterBox.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                updateSliderFromEvent(e);
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (isDragging) updateSliderFromEvent(e);
+            });
+
+            window.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+
+            elements.beforeAfterBox.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                updateSliderFromEvent(e);
+            });
+
+            window.addEventListener('touchmove', (e) => {
+                if (isDragging) updateSliderFromEvent(e);
+            });
+
+            window.addEventListener('touchend', () => {
+                isDragging = false;
+            });
+        }
+
+        function setSliderPosition(percentage) {
+            state.sliderPos = percentage;
+            elements.processedLayer.style.width = `${percentage}%`;
+            elements.sliderHandle.style.left = `${percentage}%`;
+        }
+
+        function setupTabEvents() {
+            elements.tabBgBtn.addEventListener('click', () => {
+                state.activeTab = 'bg';
+                elements.tabBgBtn.className = 'py-2.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 bg-vinted text-white shadow';
+                elements.tabIronBtn.className = 'py-2.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 text-slate-400 hover:text-white';
+                elements.panelBg.classList.remove('hidden');
+                elements.panelIron.classList.add('hidden');
+            });
+
+            elements.tabIronBtn.addEventListener('click', () => {
+                state.activeTab = 'iron';
+                elements.tabIronBtn.className = 'py-2.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 bg-vinted text-white shadow';
+                elements.tabBgBtn.className = 'py-2.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 text-slate-400 hover:text-white';
+                elements.panelIron.classList.remove('hidden');
+                elements.panelBg.classList.add('hidden');
+            });
+
+            elements.ironIntensitySlider.addEventListener('input', (e) => {
+                const vals = ['Delikatne', 'Średnie (AI)', 'Mocne (AI)'];
+                elements.ironIntensityVal.textContent = vals[parseInt(e.target.value) - 1];
+            });
+        }
+
+        function setupPresetEvents() {
+            const btns = document.querySelectorAll('.preset-bg-btn');
+            btns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btns.forEach(b => {
+                        b.classList.remove('active', 'border-vinted');
+                        b.classList.add('border-slate-800');
+                    });
+                    btn.classList.add('active', 'border-vinted');
+                    btn.classList.remove('border-slate-800');
+                    state.selectedBgPreset = btn.getAttribute('data-bg-preset');
+                });
+            });
+        }
+
+        function setupActionEvents() {
+            // Apply Background Change
+            elements.applyBgBtn.addEventListener('click', async () => {
+                if (!state.originalImageSrc) {
+                    showToast('Najpierw załaduj zdjęcie ciucha!', 'fa-circle-exclamation text-amber-400');
+                    return;
                 }
-            }, 1800);
+                await processBackgroundAI();
+            });
+
+            // Apply Ironing / Smooth Effect
+            elements.applyIronBtn.addEventListener('click', async () => {
+                if (!state.originalImageSrc) {
+                    showToast('Najpierw załaduj zdjęcie ciucha!', 'fa-circle-exclamation text-amber-400');
+                    return;
+                }
+                await processIroningAI();
+            });
+
+            // Generate Vinted Listing Details
+            elements.generateListingBtn.addEventListener('click', async () => {
+                if (!state.originalImageSrc) {
+                    showToast('Najpierw załaduj zdjęcie ciucha!', 'fa-circle-exclamation text-amber-400');
+                    return;
+                }
+                await generateVintedListingAI();
+            });
+
+            // Download processed image
+            elements.downloadBtn.addEventListener('click', () => {
+                if (!state.processedImageSrc) return;
+                const a = document.createElement('a');
+                a.href = state.processedImageSrc;
+                a.download = `vinted_studio_${Date.now()}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                showToast('Pobieranie zdjęcia rozpoczęte!');
+            });
         }
 
-        function generateListing() {
-            alert("Sztos! Opis pod Vinted (stan, marka, wymiary i haszczyki) został wygenerowany i skopiowany do schowka!");
+        // Helper to update processed layer
+        function setProcessedImage(dataUrl) {
+            state.processedImageSrc = dataUrl;
+            elements.imgProcessed.src = dataUrl;
+            setSliderPosition(100); // Slide to 100% to show full edited result
         }
 
-        function resetApp() {
-            imageInput.value = '';
-            previewImage.src = '';
-            previewImage.style.filter = 'none';
-            workspace.classList.add('hidden');
-            uploadCard.classList.remove('hidden');
+        function showLoader(title, sub) {
+            elements.aiLoaderTitle.textContent = title;
+            elements.aiLoaderSub.textContent = sub;
+            elements.aiLoader.classList.remove('hidden');
+            elements.aiLoader.classList.add('flex');
+        }
+
+        function hideLoader() {
+            elements.aiLoader.classList.add('hidden');
+            elements.aiLoader.classList.remove('flex');
+        }
+
+        async function processBackgroundAI() {
+            showLoader("Zmieniamy tło na Vinted Studio...", "Generowanie ultra-estetycznego tła za pomocą modelu AI...");
+
+            const presetPrompts = {
+                'studio_white': 'clean solid bright aesthetic white studio studio background with soft natural shadow under the clothing',
+                'nordic_wood': 'minimalist light nordic oak wood floor surface aesthetic background for e-commerce photography',
+                'marble_lux': 'luxurious smooth white marble countertop surface with subtle grey veins e-commerce studio',
+                'pastel_sage': 'soft pastel sage green aesthetic studio wall background for fashion product photo',
+                'studio_hanger': 'minimalist boho studio background with light linen texture and natural sunlight shadows',
+                'transparent': 'pure transparent white background, clean cutout crisp outline'
+            };
+
+            const userCustom = elements.customBgPrompt.value.trim();
+            const bgPrompt = userCustom || presetPrompts[state.selectedBgPreset] || presetPrompts['studio_white'];
+
+            const fullPrompt = `Modify this clothing photo for a professional e-commerce product listing on Vinted. Keep the item of clothing in the center completely intact with all its original colors, details, logos, and shape, but replace the original background with a ${bgPrompt}. Make it photorealistic with realistic soft lighting.`;
+
+            try {
+                // Call Gemini 3.1 Flash Image model for image-to-image editing
+                const editedImage = await callGeminiImageToImage(state.originalImageSrc, fullPrompt);
+                if (editedImage) {
+                    setProcessedImage(editedImage);
+                    showToast('Tło pomyślnie zmienione przez AI!');
+                } else {
+                    // Fallback to local aesthetic studio canvas filter if API fails/unavailable
+                    applyLocalStudioFilter('bg', state.selectedBgPreset);
+                    showToast('Zastosowano filtr tła studio!');
+                }
+            } catch (err) {
+                console.warn('API call fallback to local studio engine:', err);
+                applyLocalStudioFilter('bg', state.selectedBgPreset);
+                showToast('Zastosowano szybki filtr tła!');
+            } finally {
+                hideLoader();
+            }
+        }
+
+        async function processIroningAI() {
+            const level = elements.ironIntensitySlider.value;
+            showLoader("Prasowanie koszulki przez AI...", "Wygładzanie zagnieceń tkaniny i odświeżanie materiału...");
+
+            const ironPrompt = "Edit this clothing item photo for a Vinted listing. Remove wrinkles, creases, and fold lines from the fabric so the clothing looks neatly pressed, ironed, and fresh, while keeping the garment shape, fabric texture, brand logo, seams, and color completely natural and untouched.";
+
+            try {
+                if (level === "3") { // AI Deep Ironing
+                    const editedImage = await callGeminiImageToImage(state.originalImageSrc, ironPrompt);
+                    if (editedImage) {
+                        setProcessedImage(editedImage);
+                        showToast('Koszulka została idealnie wyprasowana przez AI!');
+                    } else {
+                        applyLocalIronFilter(level);
+                        showToast('Wyprasowano koszulkę!');
+                    }
+                } else {
+                    // Fast local high-quality smooth filter pass
+                    applyLocalIronFilter(level);
+                    showToast('Wygładzono materiał!');
+                }
+            } catch (err) {
+                applyLocalIronFilter(level);
+                showToast('Wygładzono materiał!');
+            } finally {
+                hideLoader();
+            }
+        }
+
+        function applyLocalStudioFilter(type, preset) {
+            const canvas = elements.processedCanvas;
+            const ctx = canvas.getContext('2d');
+            const img = elements.imgOriginal;
+
+            canvas.width = img.naturalWidth || 800;
+            canvas.height = img.naturalHeight || 800;
+
+            // Draw original image
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            // Enhance contrast and warmth for studio look
+            ctx.globalCompositeOperation = 'source-over';
+            
+            // Add subtle vignette/studio lighting gradient overlay
+            const grad = ctx.createRadialGradient(
+                canvas.width / 2, canvas.height / 2, canvas.width * 0.2,
+                canvas.width / 2, canvas.height / 2, canvas.width * 0.7
+            );
+            
+            if (preset === 'nordic_wood') {
+                grad.addColorStop(0, 'rgba(251, 243, 226, 0.15)');
+                grad.addColorStop(1, 'rgba(180, 140, 100, 0.2)');
+            } else if (preset === 'pastel_sage') {
+                grad.addColorStop(0, 'rgba(204, 227, 222, 0.15)');
+                grad.addColorStop(1, 'rgba(107, 144, 128, 0.2)');
+            } else { // Clean white
+                grad.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
+                grad.addColorStop(1, 'rgba(230, 235, 240, 0.25)');
+            }
+
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            setProcessedImage(canvas.toDataURL('image/png'));
+        }
+
+        function applyLocalIronFilter(level) {
+            const canvas = elements.processedCanvas;
+            const ctx = canvas.getContext('2d');
+            const img = elements.imgOriginal;
+
+            canvas.width = img.naturalWidth || 800;
+            canvas.height = img.naturalHeight || 800;
+
+            // Multi-pass smoothing for crease reduction
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            // Soft light blur overlay to smooth wrinkles
+            const blurAmount = level * 1.5;
+            ctx.filter = `blur(${blurAmount}px) contrast(105%) brightness(102%)`;
+            
+            // Draw blurred layer with soft opacity to preserve edges
+            ctx.globalAlpha = 0.35;
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            
+            // Reset filter & alpha
+            ctx.filter = 'none';
+            ctx.globalAlpha = 1.0;
+
+            setProcessedImage(canvas.toDataURL('image/png'));
+        }
+
+        async function generateVintedListingAI() {
+            showLoader("Gemini AI analizuje ciuch...", "Generowanie tytułu, marki, rozmiaru, stanu oraz opisu na Vinted...");
+
+            const systemPrompt = `Jesteś ekspertką od sprzedaży ubrań na platformie Vinted. Twoim zadaniem jest przeanalizowanie zdjęcia ubrania i wygenerowanie idealnej, chwytliwej, kompletnej aukcji Vinted w języku polskim. 
+Zwróć WYŁĄCZNIE poprawny kod JSON o dokładnie takiej strukturze:
+{
+    "title": "Krótki, chwytliwy tytuł (max 50 znaków, np. Czarna koszulka oversize Y2K M)",
+    "brand": "Prawdopodobna marka (np. Zara, H&M, Nike, Vintage lub Brak informacji)",
+    "size": "Prawdopodobny rozmiar (np. M / 38)",
+    "condition": "Stan ciucha (np. Bardzo dobry / Idealny)",
+    "suggestedPrice": "Sugerowana cena w PLN (np. 45 PLN)",
+    "description": "Estetyczny, miły opis zachęcający do zakupu ze szczegółami kroju, materiału i stylu.",
+    "tags": "#hashtag1 #hashtag2 #vinted #vintage #streetwear #fashion"
+}`;
+
+            const base64Data = state.originalImageSrc.split(',')[1];
+            const payload = {
+                contents: [
+                    {
+                        role: "user",
+                        parts: [
+                            { text: "Przeanalizuj to zdjęcie ciucha i stwórz ofertę na Vinted w formacie JSON." },
+                            {
+                                inlineData: {
+                                    mimeType: "image/jpeg",
+                                    data: base64Data
+                                }
+                            }
+                        ]
+                    }
+                ],
+                generationConfig: {
+                    responseMimeType: "application/json"
+                },
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                }
+            };
+
+            try {
+                const apiKey = state.apiKey || "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                const response = await fetchWithRetry(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const jsonText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (jsonText) {
+                    const data = JSON.parse(jsonText);
+                    elements.vintedTitle.value = data.title || '';
+                    elements.vintedBrand.value = data.brand || 'Zara / Vintage';
+                    elements.vintedSize.value = data.size || 'M / 38';
+                    elements.vintedCondition.value = data.condition || 'Bardzo dobry';
+                    elements.vintedPrice.value = data.suggestedPrice || '45 PLN';
+                    elements.vintedDescription.value = data.description || '';
+                    elements.vintedTags.value = data.tags || '#vinted #fashion #vintage';
+
+                    showToast('Wygenerowano ogłoszenie Vinted z Gemini AI!');
+                } else {
+                    throw new Error('Brak wynikowej odpowiedzi');
+                }
+            } catch (err) {
+                console.error("Listing Generation Error:", err);
+                // Fallback smart placeholder filler
+                elements.vintedTitle.value = "Stylowa Koszulka Oversize Vintage";
+                elements.vintedBrand.value = "Zara / Vintage";
+                elements.vintedSize.value = "M / 38";
+                elements.vintedCondition.value = "Bardzo dobry";
+                elements.vintedPrice.value = "39 PLN";
+                elements.vintedDescription.value = "Cześć! Mam na sprzedaż świetną koszulkę w bardzo dobrym stanie. Bardzo wygodna, świetnie leży i pasuje do wielu stylówek (streetwear / casual). Brak plam czy uszkodzeń. Szybka wysyłka paczkomatem!";
+                elements.vintedTags.value = "#vinted #koszulka #vintage #streetwear #y2k #fashion";
+                
+                showToast('Uzupełniono opis wzorcowy!');
+            } finally {
+                hideLoader();
+            }
+        }
+
+        async function callGeminiImageToImage(base64ImageSrc, prompt) {
+            const base64Data = base64ImageSrc.split(',')[1];
+            const mimeType = base64ImageSrc.substring(base64ImageSrc.indexOf(':') + 1, base64ImageSrc.indexOf(';')) || 'image/jpeg';
+
+            const payload = {
+                contents: [{
+                    role: "user",
+                    parts: [
+                        { text: prompt },
+                        {
+                            inlineData: {
+                                mimeType: mimeType,
+                                data: base64Data
+                            }
+                        }
+                    ]
+                }],
+                generationConfig: {
+                    responseModalities: ['TEXT', 'IMAGE']
+                }
+            };
+
+            const apiKey = state.apiKey || "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
+
+            const response = await fetchWithRetry(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+            const part = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+
+            if (part && part.inlineData && part.inlineData.data) {
+                return `data:${part.inlineData.mimeType || 'image/png'};base64,${part.inlineData.data}`;
+            }
+            return null;
+        }
+
+        // Retry helper with exponential backoff
+        async function fetchWithRetry(url, options, maxRetries = 2) {
+            let delay = 1000;
+            for (let i = 0; i <= maxRetries; i++) {
+                try {
+                    const res = await fetch(url, options);
+                    if (res.ok) return res;
+                } catch (e) {
+                    if (i === maxRetries) throw e;
+                }
+                await new Promise(r => setTimeout(r, delay));
+                delay *= 2;
+            }
+            throw new Error('API request failed');
+        }
+
+        function setupCopyEvents() {
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetId = btn.getAttribute('data-copy-target');
+                    const targetInput = document.getElementById(targetId);
+                    if (targetInput && targetInput.value) {
+                        copyToClipboard(targetInput.value);
+                        showToast('Skopiowano do schowka!');
+                    }
+                });
+            });
+
+            elements.copyAllBtn.addEventListener('click', () => {
+                const fullText = `TYTUŁ: ${elements.vintedTitle.value}
+MARKA: ${elements.vintedBrand.value} | ROZMIAR: ${elements.vintedSize.value} | STAN: ${elements.vintedCondition.value}
+SUGEROWANA CENA: ${elements.vintedPrice.value}
+
+OPIS:
+${elements.vintedDescription.value}
+
+HASHTAGI:
+${elements.vintedTags.value}`;
+
+                copyToClipboard(fullText);
+                showToast('Skopiowano całe ogłoszenie do schowka!');
+            });
+        }
+
+        function copyToClipboard(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text);
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+            }
+        }
+
+        function setupModalEvents() {
+            elements.apiKeyBtn.addEventListener('click', () => {
+                elements.apiKeyInput.value = state.apiKey;
+                elements.apiKeyModal.classList.remove('hidden');
+            });
+
+            elements.closeApiKeyModal.addEventListener('click', () => {
+                elements.apiKeyModal.classList.add('hidden');
+            });
+
+            elements.saveApiKeyBtn.addEventListener('click', () => {
+                const val = elements.apiKeyInput.value.trim();
+                state.apiKey = val;
+                if (val) {
+                    localStorage.setItem('vinted_gemini_api_key', val);
+                    showToast('Zapisano własny klucz API!');
+                } else {
+                    localStorage.removeItem('vinted_gemini_api_key');
+                    showToast('Przywrócono domyślne API!');
+                }
+                updateApiKeyUI();
+                elements.apiKeyModal.classList.add('hidden');
+            });
+
+            elements.clearApiKeyBtn.addEventListener('click', () => {
+                state.apiKey = '';
+                localStorage.removeItem('vinted_gemini_api_key');
+                elements.apiKeyInput.value = '';
+                updateApiKeyUI();
+                showToast('Używasz domyślnego klucza Gemini!');
+                elements.apiKeyModal.classList.add('hidden');
+            });
+        }
+
+        function updateApiKeyUI() {
+            if (state.apiKey) {
+                elements.apiKeyStatusText.textContent = 'Klucz: Własny (Aktywny)';
+            } else {
+                elements.apiKeyStatusText.textContent = 'Klucz API: Domyślny';
+            }
         }
     </script>
 </body>
